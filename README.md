@@ -151,4 +151,4 @@ ls outputs_<job_id>
 ```
 where `<job_id>` is replaced with the relevant job ID assigned to the submitted job.
 
-To transfer the job outputs back to your local system you can use [one of the options listed in the Research computing documentation](https://www.rc.ucl.ac.uk/docs/howto/#how-do-i-transfer-data-onto-the-system).
+To transfer the job outputs back to your local system you can use [one of the options listed in the Research Computing documentation](https://www.rc.ucl.ac.uk/docs/howto/#how-do-i-transfer-data-onto-the-system).
