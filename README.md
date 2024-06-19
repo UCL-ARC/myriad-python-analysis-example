@@ -58,13 +58,13 @@ module load python3/3.11
 ```
 to use the module system on Myriad to load the (at the time of writing) latest version of Python available on Myriad (in some cases you may wish to use an earlier version if you know your script or the packages it depends on requires a specific Python version).
 
-To create a new virtual environment in a directory named `.venv` in the current directory run
+To create a new virtual environment in a directory named `venv` in the current directory run
 ```bash
-python -m venv .venv
+python -m venv venv
 ```
 Once the environment has finished being set up you can run
 ```bash
-source .venv/bin/activate
+source venv/bin/activate
 ```
 to [activate](https://docs.python.org/3/library/venv.html#how-venvs-work) the environment.
 Once the environment is activated, we can install the third-party Python packages required for running our analysis script by running

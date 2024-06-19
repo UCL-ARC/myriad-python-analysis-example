@@ -30,7 +30,7 @@ module load python3/3.11
 PROJECT_DIR=/home/<your_UCL_id>/Scratch/myriad-python-analysis-example
 
 # Activate the virtual environment in which you installed the project dependencies
-source $PROJECT_DIR/.venv/bin/activate
+source $PROJECT_DIR/venv/bin/activate
 
 # Change current working directory to temporary file system on node
 cd $TMPDIR
