@@ -9,7 +9,7 @@ This repository gives an example of how to run a Python analysis script on UCL's
 > which is available both for self-paced study and is also delivered as a synchronous workshop.
 > There is also [extensive user documentation for UCL's researching computing platforms](https://www.rc.ucl.ac.uk/docs/).
 
-The script is run in a [Python intepreter](https://docs.python.org/3/tutorial/interpreter.html) installed in a [Conda](https://conda.io/projects/conda/en/latest/index.html) environment which has been set up with the required versions of third-party packages.
+The script is run in a [Python intepreter](https://docs.python.org/3/tutorial/interpreter.html) installed in a [virtual environment](https://docs.python.org/3/tutorial/venv.html)  which has been set up with the required versions of third-party packages.
 The example here installs [NumPy](https://numpy.org/) and [Matplotlib](https://matplotlib.org/).
 The Python package requirements are specified in the [`requirements.txt`](requirements.txt) file.
 To set up an environment with a different set of requirements you can simply replace the example `requirements.txt` file here with one for your use case - for example to export a list of the Python packages installed in an existing environment run
@@ -19,7 +19,6 @@ python -m pip freeze > requirements.txt
 
 The [script here](run_analysis.py) loads a sequence of comma separated value (CSV) files from a data directory, computes summary statistics along the row axis, plots these using Matplotlib and save the plots to an output directory.
 It illustrates using Pythons built-in [argparse](https://docs.python.org/3/library/argparse.html) module to parse command-line arguments passed to the script specifying the paths to the directories containing the data files and which to write the analysis result out to.
-
 
 ## Getting this example repository on Myriad
 
@@ -36,16 +35,16 @@ In order these commands will:
 - clone this repository using Git into your scratch space,
 - change the current working directory to the root directory of the cloned repository.
 
+## Setting up a virtual environment on Myriad
 
-## Setting up Conda environment on Myriad
-
-Myriad has a range of software pre-installed, including a module for [Minconda](https://docs.anaconda.com/miniconda/), which we will load to give us access to the [Conda command line interface](https://conda.io/projects/conda/en/latest/user-guide/getting-started.html) to create a Python environment to run our script in.
+Myriad has a range of software pre-installed, including modules for [various versions of Python](https://www.rc.ucl.ac.uk/docs/Installed_Software_Lists/module-packages/).
+Here we will load a Python version from one of the pre-installed modules and then [create a virtual environment to install our project specific dependencies in](https://www.rc.ucl.ac.uk/docs/Software_Guides/Installing_Software/#using-your-own-virtualenv).
 
 > [!TIP]
-> In some cases you may be able to instead use [the `python3/recommended` bundle module](https://www.rc.ucl.ac.uk/docs/Installed_Software_Lists/python-packages/) to run your script if it already contains all of the Python package dependencies you need.
-> We illustrate the approach of setting up a Conda environment here as in some cases you may need specific packages or versions packages that are not available in the `python3/recommended` bundle module.
+> In some cases you may be able to instead use the packages bundled with the [`python3` modules on Myriad](https://www.rc.ucl.ac.uk/docs/Installed_Software_Lists/python-packages/) to run your script if they already include all of the Python package dependencies you need.
+> We illustrate the approach of setting up a virtual environment here as in some cases you may need specific packages or versions packages that are not available in the `python3` bundle modules.
 
-Here we will create our Conda environment and install the necessary packages into it on a _login node_ on Myriad.
+Here we will create our virtual environment and install the necessary packages into it on a _login node_ on Myriad.
 
 > [!CAUTION]
 > The login nodes are the machines you gain access to when logging in to the cluster via `ssh`.
@@ -55,39 +54,20 @@ Here we will create our Conda environment and install the necessary packages int
 From the same command prompt (opened via `ssh`) you ran the commands in the previous section, first run
 
 ```bash
-module load python/miniconda3/24.3.0-0
+module load python3/3.11
 ```
+to use the module system on Myriad to load the (at the time of writing) latest version of Python available on Myriad (in some cases you may wish to use an earlier version if you know your script or the packages it depends on requires a specific Python version).
 
-to use the [module system](https://www.rc.ucl.ac.uk/docs/Installed_Software_Lists/module-packages/) on Myriad to load the (at the time of writing) latest version of Miniconda available.
-
-When you run this command you will see a message
-```
-Miniconda: To make conda operate correctly, please run:
-            source $UCL_CONDA_PATH/etc/profile.d/conda.sh
-```
-You should now run the command indicated
+To create a new virtual environment in a directory named `.venv` in the current directory run
 ```bash
-source $UCL_CONDA_PATH/etc/profile.d/conda.sh
+python -m venv .venv
 ```
-Now that you have loaded the Miniconda module, you should have `conda` command available - you can check this by running
-```bash
-which conda
-```
-which should output
-```
-/shared/ucl/apps/miniconda/24.3.0-0/bin/conda
-```
-To create a new Conda environment named `python-analysis` and install Python 3.12 (the latest stable Python version at the time of writing) from the [`conda-forge`](https://conda-forge.org/) community-led channel run
-```bash
-conda create -y -n python-analysis -c conda-forge python=3.12
-```
-By default the environment will be installed in a directory `.conda/envs` under your home directory.
 Once the environment has finished being set up you can run
 ```bash
-conda activate python-analysis
+source .venv/bin/activate
 ```
-to [activate](https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#activating-an-environment) the environment.
-Once the Conda environment is activated, we can install the third-party Python packages required for running our analysis script by running
+to [activate](https://docs.python.org/3/library/venv.html#how-venvs-work) the environment.
+Once the environment is activated, we can install the third-party Python packages required for running our analysis script by running
 ```bash
 python -m pip install -r requirements.txt
 ```
@@ -115,7 +95,6 @@ If you now run
 ```bash
 ls data
 ```
-
 you should see a list of CSV files outputted.
 
 > [!TIP]
@@ -126,7 +105,7 @@ you should see a list of CSV files outputted.
 
 To submit a job to the scheduler on Myriad for running on the compute nodes, you need to write a [job script](https://www.rc.ucl.ac.uk/docs/Example_Jobscripts/).
 A job script both attaches metadata to the job describing for example [the resources required to run the job](https://www.rc.ucl.ac.uk/docs/Experienced_Users/#resources-you-can-request), and also specifies the commands the job should run.
-We have included a minimal example job script for running the Python script [`run_analysis.py`](run_analysis.py) from the `python-analysis` Conda environment you set up in a previous section.
+We have included a minimal example job script for running the Python script [`run_analysis.py`](run_analysis.py) from the virtual environment you set up in a previous section.
 The script here writes outputs to a local temporary directory on the compute node assigned to the job.
 One the Python analysis script has completed, the outputs created by the script are copied from the local directory on the node back to your scratch space using [`rsync`](https://en.wikipedia.org/wiki/Rsync).
 
