@@ -2,7 +2,7 @@
 
 This repository gives an example of how to run a Python analysis script on UCL's [Myriad](https://www.rc.ucl.ac.uk/docs/Clusters/Myriad/) cluster.
 
-> ![TIP]
+> [!TIP]
 > This example is intentionally minimal and has only relatively sparse notes and explanations of the steps required.
 > A much fuller introduction to using UCL's research computing platforms is available in the 
 > [_Introduction to high performance computing at UCL_ course on Moodle](https://moodle.ucl.ac.uk/course/view.php?id=33216)
@@ -41,13 +41,13 @@ In order these commands will:
 
 Myriad has a range of software pre-installed, including a module for [Minconda](https://docs.anaconda.com/miniconda/), which we will load to give us access to the [Conda command line interface](https://conda.io/projects/conda/en/latest/user-guide/getting-started.html) to create a Python environment to run our script in.
 
-> ![TIP]
+> [!TIP]
 > In some cases you may be able to instead use [the `python3/recommended` bundle module](https://www.rc.ucl.ac.uk/docs/Installed_Software_Lists/python-packages/) to run your script if it already contains all of the Python package dependencies you need.
 > We illustrate the approach of setting up a Conda environment here as in some cases you may need specific packages or versions packages that are not available in the `python3/recommended` bundle module.
 
 Here we will create our Conda environment and install the necessary packages into it on a _login node_ on Myriad. 
 
-> ![CAUTION]
+> [!CAUTION]
 > The login nodes are the machines you gain access to when logging in to the cluster via `ssh`.
 > They should only be used for tasks such as copying data files, setting up the environment to run a job and submitting jobs to the scheduler.
 > Any computationally intensive tasks should be submitted as a job to the scheduler where it will run on a compute node, to ensure the login nodes, which are a shared resource across all users, remain responsive.
@@ -118,7 +118,7 @@ ls data
 
 you should see a list of CSV files outputted.
 
-> ![TIP]
+> [!TIP]
 > While downloading data from the internet is one option, in some cases you may have your data already stored elsewhere on UCL systems, for example in the [_Research Data Storage_ (RDS) service](https://www.ucl.ac.uk/advanced-research-computing/platforms-and-services/research-data-storage-service).
 > There is a guide in the Research Computing documentation for [how to transfer data from the RDS to Myriad](https://www.rc.ucl.ac.uk/docs/Supplementary/Connecting_to_RDSS/#between-myriad-and-rdss).
 
