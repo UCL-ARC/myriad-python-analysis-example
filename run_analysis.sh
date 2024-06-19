@@ -18,7 +18,7 @@
 # Request 1 cores.
 #$ -pe smp 1
 
-# Set the working directory to somewhere in your scratch space.
+# Set the working directory to project directory in your scratch space.
 # Replace "<your_UCL_id>" with your UCL user ID
 #$ -wd /home/<your_UCL_id>/Scratch/myriad-python-analysis-example
 

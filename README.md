@@ -125,18 +125,30 @@ Once you have updated the job script, it can be submitted to the scheduler syste
 qsub run_analysis.sh
 ```
 This will output a message telling your job (which will be named `python-analysis-example` if you kept the defaults set in the job script) has been submitted and informing you of the assigned job ID.
-You can [check on the status of your submitted jobs](https://www.rc.ucl.ac.uk/docs/howto/#how-do-i-monitor-a-job) by running
+
+## Checking job status and getting job outputs
+
+You can [check on the status of your submitted job(s)](https://www.rc.ucl.ac.uk/docs/howto/#how-do-i-monitor-a-job) by running
 ```bash
 qstat
 ```
+
 When your job has completed running [several output files will be written](https://www.rc.ucl.ac.uk/docs/Job_Results/).
-These files will have the naming scheme `<job_name>.<character_code><job_id>` where
-- `<job_name>` is the name of the job in the submitted job script (for the example here `python-analysis`),
+These files will have the naming scheme `<job_name>.<output_code><job_id>` where
+- `<job_name>` is the name of the job in the submitted job script (for the example here `python-analysis-example`),
 - `<output_code>` is one of several codes specifying the output type,
 - `<job_id>` is the job ID assigned to the submitted job and output by the `qsub` command.
 
-The two output types and corresponding `<output_code>` values are
+The main two output types and corresponding `<output_code>` values are
 - `o` for captured output to `stdout` (for example the output from `print` calls in your Python script or `echo` commands in the job script),
 - `e` for the captured output to `stderr` (any errors which occurred when running script including for example the tracebacks of Python exceptions).
 
-The job script example here will copy the files outputted by the analysis script to a subdirectory named `output_<job_id>` where `<job_id> is the job ID of the submitted job.
+The job script example here will copy the files outputted by the analysis script to a subdirectory named `output_<job_id>` where `<job_id>` is the job ID of the submitted job. For the example here this will consist of a set of PDF files corresponding to the saved summary statistic plots for each of the input data files.
+
+You can list all the files output by the analysis script by running
+```bash
+ls outputs_<job_id>
+```
+where `<job_id>` is replaced with the relevant job ID assigned to the submitted job.
+
+To transfer the job outputs back to your local system you can use [one of the options listed in the Research computing documentation](https://www.rc.ucl.ac.uk/docs/howto/#how-do-i-transfer-data-onto-the-system).
