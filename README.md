@@ -1,10 +1,10 @@
-# Running a Python script on UCL Myriad cluster
+# Running a Python script on UCL's Myriad cluster
 
 This repository gives an example of how to run a Python analysis script on UCL's [Myriad](https://www.rc.ucl.ac.uk/docs/Clusters/Myriad/) cluster.
 
 > [!TIP]
 > This example is intentionally minimal and has only relatively sparse notes and explanations of the steps required.
-> A much fuller introduction to using UCL's research computing platforms is available in the 
+> A much fuller introduction to using UCL's research computing platforms is available in the
 > [_Introduction to high performance computing at UCL_ course on Moodle](https://moodle.ucl.ac.uk/course/view.php?id=33216)
 > which is available both for self-paced study and is also delivered as a synchronous workshop.
 > There is also [extensive user documentation for UCL's researching computing platforms](https://www.rc.ucl.ac.uk/docs/).
@@ -17,7 +17,7 @@ To set up an environment with a different set of requirements you can simply rep
 python -m pip freeze > requirements.txt
 ```
 
-The [script here](run_analysis.py) simply loads a sequence of comma separated value (CSV) files from a data directory, computes summary statistics along the row axis, plots these using Matplotlib and save the plots to an output directory.
+The [script here](run_analysis.py) loads a sequence of comma separated value (CSV) files from a data directory, computes summary statistics along the row axis, plots these using Matplotlib and save the plots to an output directory.
 It illustrates using Pythons built-in [argparse](https://docs.python.org/3/library/argparse.html) module to parse command-line arguments passed to the script specifying the paths to the directories containing the data files and which to write the analysis result out to.
 
 
@@ -32,8 +32,8 @@ cd myriad-python-analysis-example
 ```
 
 In order these commands will:
-- change the current working directory to your scratch space, 
-- clone this repository using Git into your scratch space, 
+- change the current working directory to your scratch space,
+- clone this repository using Git into your scratch space,
 - change the current working directory to the root directory of the cloned repository.
 
 
@@ -45,7 +45,7 @@ Myriad has a range of software pre-installed, including a module for [Minconda](
 > In some cases you may be able to instead use [the `python3/recommended` bundle module](https://www.rc.ucl.ac.uk/docs/Installed_Software_Lists/python-packages/) to run your script if it already contains all of the Python package dependencies you need.
 > We illustrate the approach of setting up a Conda environment here as in some cases you may need specific packages or versions packages that are not available in the `python3/recommended` bundle module.
 
-Here we will create our Conda environment and install the necessary packages into it on a _login node_ on Myriad. 
+Here we will create our Conda environment and install the necessary packages into it on a _login node_ on Myriad.
 
 > [!CAUTION]
 > The login nodes are the machines you gain access to when logging in to the cluster via `ssh`.
@@ -60,7 +60,7 @@ module load python/miniconda3/24.3.0-0
 
 to use the [module system](https://www.rc.ucl.ac.uk/docs/Installed_Software_Lists/module-packages/) on Myriad to load the (at the time of writing) latest version of Miniconda available.
 
-When you run this command you will see a message 
+When you run this command you will see a message
 ```
 Miniconda: To make conda operate correctly, please run:
             source $UCL_CONDA_PATH/etc/profile.d/conda.sh
@@ -93,10 +93,10 @@ python -m pip install -r requirements.txt
 ```
 from the root directory of your local clone of the repository (this should still be your working directory providing you have followed the steps as above).
 
-## Getting data 
+## Getting data
 
-There are a variety of approaches [for transferring data on to Myriad](https://www.rc.ucl.ac.uk/docs/howto/#how-do-i-transfer-data-onto-the-system).
-Here we will illustrate getting a zipped data file from the Internet using a [command line utility `wget](https://en.wikipedia.org/wiki/Wget) and unzipping the files.
+There are a variety of approaches [for transferring data onto Myriad](https://www.rc.ucl.ac.uk/docs/howto/#how-do-i-transfer-data-onto-the-system).
+Here we will illustrate getting a zipped data file from the Internet using a [command line utility `wget`](https://en.wikipedia.org/wiki/Wget) and unzipping the files.
 We use as an example dataset the data from the [Software Carpentry](https://software-carpentry.org/) [_Programming with Python_ lesson](https://swcarpentry.github.io/python-novice-inflammation).
 
 In the command prompt (running on a login node on Myriad that you accessed previously using `ssh`) run each of the following commands in turn
@@ -124,21 +124,21 @@ you should see a list of CSV files outputted.
 
 ## Submitting a job
 
-To submit a job to the scheduler on Myriad for running on the compute nodes, you need to write a [job script](https://www.rc.ucl.ac.uk/docs/Example_Jobscripts/). 
-A job script both attaches metadata to the job describing for example the resource required to run the job, and also specifies the commands to the job should run.
+To submit a job to the scheduler on Myriad for running on the compute nodes, you need to write a [job script](https://www.rc.ucl.ac.uk/docs/Example_Jobscripts/).
+A job script both attaches metadata to the job describing for example [the resources required to run the job](https://www.rc.ucl.ac.uk/docs/Experienced_Users/#resources-you-can-request), and also specifies the commands the job should run.
 We have included a minimal example job script for running the Python script [`run_analysis.py`](run_analysis.py) from the `python-analysis` Conda environment you set up in a previous section.
-The script here writes outputs to a local temporary directory on the compute node assigned to the job. 
+The script here writes outputs to a local temporary directory on the compute node assigned to the job.
 One the Python analysis script has completed, the outputs created by the script are copied from the local directory on the node back to your scratch space using [`rsync`](https://en.wikipedia.org/wiki/Rsync).
 
 The job script needs to be edited to replace the placeholder `<your_UCL_id>` values with your UCL userid (the same one you used to login to Myriad with).
-You can open the job script in [a basic terminal editor `nano`](https://en.wikipedia.org/wiki/GNU_nano), 
+You can open the job script in [a basic terminal editor `nano`](https://en.wikipedia.org/wiki/GNU_nano),
 ```bash
 nano run_analysis.sh
 ```
 and change all occurences of `<your_UCL_id>` (including the angular brackets) to your specific userid, hitting `Ctrl+O` and then `Ctrl+X` to respectively save the changes and exit from `nano`.
-Alternatively you can run the following [`sed` command](https://en.wikipedia.org/wiki/Sed) to globally replace `<your_UCL_id>` with the text `aabbxyz` (which you should swap with your userid!)
+Alternatively you can run the following [`sed` command](https://en.wikipedia.org/wiki/Sed) to globally replace `<your_UCL_id>` with the value of the variable `$USER` (which should correspond to your UCL userid)
 ```bash
-sed -i 's/<your_UCL_id>/aabbxyz/g' run_analysis.sh
+sed -i "s/<your_UCL_id>/$USER/g" run_analysis.sh
 ```
 
 Once you have updated the job script, it can be submitted to the scheduler system by running
@@ -149,14 +149,14 @@ This will output a message telling your job (which will be named `python-analysi
 You can [check on the status of your submitted jobs](https://www.rc.ucl.ac.uk/docs/howto/#how-do-i-monitor-a-job) by running
 ```bash
 qstat
-``` 
+```
 When your job has completed running [several output files will be written](https://www.rc.ucl.ac.uk/docs/Job_Results/).
-These files will have the naming scheme `<job_name>.<character_code><job_id>` where 
+These files will have the naming scheme `<job_name>.<character_code><job_id>` where
 - `<job_name>` is the name of the job in the submitted job script (for the example here `python-analysis`),
-- `<output_code>` is one of several codes specifying the output type, 
+- `<output_code>` is one of several codes specifying the output type,
 - `<job_id>` is the job ID assigned to the submitted job and output by the `qsub` command.
 
-The two output types and corresponding `<output_code>` values are 
+The two output types and corresponding `<output_code>` values are
 - `o` for captured output to `stdout` (for example the output from `print` calls in your Python script or `echo` commands in the job script),
 - `e` for the captured output to `stderr` (any errors which occurred when running script including for example the tracebacks of Python exceptions).
 
