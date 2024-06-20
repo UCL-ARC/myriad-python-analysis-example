@@ -7,12 +7,13 @@ This repository gives an example of how to run a Python analysis script on UCL's
 > A much fuller introduction to using UCL's research computing platforms is available in the
 > [_Introduction to high performance computing at UCL_ course on Moodle](https://moodle.ucl.ac.uk/course/view.php?id=33216)
 > which is available both for self-paced study and is also delivered as a synchronous workshop.
-> There is also [extensive user documentation for UCL's researching computing platforms](https://www.rc.ucl.ac.uk/docs/).
+> There is also [extensive user documentation for UCL's research computing platforms](https://www.rc.ucl.ac.uk/docs/).
 
-The script is run in a [Python intepreter](https://docs.python.org/3/tutorial/interpreter.html) installed in a [virtual environment](https://docs.python.org/3/tutorial/venv.html)  which has been set up with the required versions of third-party packages.
+The script is run in a [Python intepreter](https://docs.python.org/3/tutorial/interpreter.html) installed in a [virtual environment](https://docs.python.org/3/tutorial/venv.html) which has been set up with the required versions of third-party packages.
 The example here installs [NumPy](https://numpy.org/) and [Matplotlib](https://matplotlib.org/).
 The Python package requirements are specified in the [`requirements.txt`](requirements.txt) file.
 To set up an environment with a different set of requirements you can simply replace the example `requirements.txt` file here with one for your use case - for example to export a list of the Python packages installed in an existing environment run
+
 ```bash
 python -m pip freeze > requirements.txt
 ```
@@ -22,7 +23,7 @@ It illustrates using Pythons built-in [argparse](https://docs.python.org/3/libra
 
 ## Getting this example repository on Myriad
 
-To create a local copy of this repository in your scratch space on Myriad, first [log-in using `ssh`](https://www.rc.ucl.ac.uk/docs/howto/#how-do-i-log-in), and then from the resulting command prompt run
+To create a local copy of this repository in your scratch space on Myriad, first [login using `ssh`](https://www.rc.ucl.ac.uk/docs/howto/#how-do-i-log-in), and then from the resulting command prompt run
 
 ```bash
 cd ~/Scratch
@@ -42,7 +43,7 @@ Here we will load a Python version from one of the pre-installed modules and the
 
 > [!TIP]
 > In some cases you may be able to instead use the packages bundled with the [`python3` modules on Myriad](https://www.rc.ucl.ac.uk/docs/Installed_Software_Lists/python-packages/) to run your script if they already include all of the Python package dependencies you need.
-> We illustrate the approach of setting up a virtual environment here as in some cases you may need specific packages or versions packages that are not available in the `python3` bundle modules.
+> We illustrate the approach of setting up a virtual environment here as in some cases you may need specific packages or versions of packages that are not available in the `python3` bundle modules.
 
 Here we will create our virtual environment and install the necessary packages into it on a _login node_ on Myriad.
 
@@ -80,11 +81,13 @@ Here we will illustrate getting a zipped data file from the Internet using a [co
 We use as an example dataset the data from the [Software Carpentry](https://software-carpentry.org/) [_Programming with Python_ lesson](https://swcarpentry.github.io/python-novice-inflammation).
 
 In the command prompt (running on a login node on Myriad that you accessed previously using `ssh`) run each of the following commands in turn
+
 ```bash
 wget https://swcarpentry.github.io/python-novice-inflammation/data/python-novice-inflammation-data.zip
 unzip python-novice-inflammation-data.zip
 rm python-novice-inflammation-data.zip
 ```
+
 In order they will,
 - use `wget` to retrieve the dataset zipped archive file from the specified URL,
 - use the `unzip` utility to extract the files from the downloaded archive,
@@ -95,6 +98,7 @@ If you now run
 ```bash
 ls data
 ```
+
 you should see a list of CSV files outputted.
 
 > [!TIP]
@@ -109,26 +113,32 @@ We have included a minimal example job script for running the Python script [`ru
 The script here writes outputs to a local temporary directory on the compute node assigned to the job.
 One the Python analysis script has completed, the outputs created by the script are copied from the local directory on the node back to your scratch space using [`rsync`](https://en.wikipedia.org/wiki/Rsync).
 
-The job script needs to be edited to replace the placeholder `<your_UCL_id>` values with your UCL userid (the same one you used to login to Myriad with).
+The job script needs to be edited to replace the placeholder `<your_UCL_id>` values with your UCL user ID (the same one you used to login to Myriad with).
 You can open the job script in [a basic terminal editor `nano`](https://en.wikipedia.org/wiki/GNU_nano),
+
 ```bash
 nano run_analysis.sh
 ```
-and change all occurences of `<your_UCL_id>` (including the angular brackets) to your specific userid, hitting `Ctrl+O` and then `Ctrl+X` to respectively save the changes and exit from `nano`.
-Alternatively you can run the following [`sed` command](https://en.wikipedia.org/wiki/Sed) to globally replace `<your_UCL_id>` with the value of the variable `$USER` (which should correspond to your UCL userid)
+
+and change all occurences of `<your_UCL_id>` (including the angular brackets) to your specific user ID, hitting `Ctrl+O` and then `Ctrl+X` to respectively save the changes and exit from `nano`.
+Alternatively you can run the following [`sed` command](https://en.wikipedia.org/wiki/Sed) to globally replace `<your_UCL_id>` with the value of the variable `$USER` (which should correspond to your UCL user ID)
+
 ```bash
 sed -i "s/<your_UCL_id>/$USER/g" run_analysis.sh
 ```
 
 Once you have updated the job script, it can be submitted to the scheduler system by running
+
 ```bash
 qsub run_analysis.sh
 ```
+
 This will output a message telling your job (which will be named `python-analysis-example` if you kept the defaults set in the job script) has been submitted and informing you of the assigned job ID.
 
 ## Checking job status and getting job outputs
 
 You can [check on the status of your submitted job(s)](https://www.rc.ucl.ac.uk/docs/howto/#how-do-i-monitor-a-job) by running
+
 ```bash
 qstat
 ```
@@ -146,9 +156,11 @@ The main two output types and corresponding `<output_code>` values are
 The job script example here will copy the files outputted by the analysis script to a subdirectory named `output_<job_id>` where `<job_id>` is the job ID of the submitted job. For the example here this will consist of a set of PDF files corresponding to the saved summary statistic plots for each of the input data files.
 
 You can list all the files output by the analysis script by running
+
 ```bash
 ls outputs_<job_id>
 ```
+
 where `<job_id>` is replaced with the relevant job ID assigned to the submitted job.
 
 To transfer the job outputs back to your local system you can use [one of the options listed in the Research Computing documentation](https://www.rc.ucl.ac.uk/docs/howto/#how-do-i-transfer-data-onto-the-system).
