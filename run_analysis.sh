@@ -19,8 +19,7 @@
 #$ -pe smp 1
 
 # Set the working directory to project directory in your scratch space.
-# Replace "<your_UCL_id>" with your UCL user ID
-#$ -wd /home/<your_UCL_id>/Scratch/myriad-python-analysis-example
+#$ -wd $HOME/Scratch/myriad-python-analysis-example
 
 # Load python3 module - this must be the same version as loaded when creating and
 # installing dependencies in the virtual environment
